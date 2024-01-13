@@ -4,12 +4,19 @@ const axios = require('axios');
 const { twitterClient } = require("./twitterClient.js")
 const CronJob = require("cron").CronJob;
 
-const app = express()
+const app = express();
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+app.get('/create', (req, res) => {
+    tweet();
+    res.send(`Tweet posted! 🚀`);
+});
 const port = process.env.PORT || 4000;
-
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)
-})
+});
+
 const getPost = async () => {
     try {
         let quote = '';
