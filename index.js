@@ -8,9 +8,9 @@ const app = express();
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
-app.get('/create', (req, res) => {
-    tweet();
-    res.send(`Tweet posted! 🚀`);
+app.get('/create', async (req, res) => {
+    const result = await tweet();
+    res.json({ result: result });
 });
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
@@ -35,14 +35,17 @@ What's inspiring you today? Share your thoughts! 💭✨
         return post;
     } catch (err) {
         console.log("🚀 ~ getPost ~ err:", err);
+        return err;
     }
 };
 const tweet = async () => {
     try {
         let post = await getPost();
-        await twitterClient.v2.tweet(post);
+        let tweetResponse = await twitterClient.v2.tweet(post);
+        return tweetResponse;
     } catch (err) {
         console.log("🚀 ~ tweet ~ err:", err);
+        return err;
     }
 }
 
